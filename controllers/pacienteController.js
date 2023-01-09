@@ -18,7 +18,7 @@ const obtenerPacientes = async (req, res) => {
 
   res.json(pacientes);  
 };
-///////////////////////////////////////////////////////
+/**/ 
 
 const obtenerPaciente = async (req, res) => {
   const {id} = req.params;
@@ -61,6 +61,7 @@ const actualizarPaciente = async (req, res) => {
     console.log(error);
   }
 };
+
 const eliminarPaciente = async (req, res) => {
   const {id} = req.params;
   const paciente = await Paciente.findById(id);

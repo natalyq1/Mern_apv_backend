@@ -5,8 +5,6 @@ import emailRegistro from "../helpers/emailRegistro.js"
 import emailOlvidePassword from "../helpers/emailOlvidePassword.js";
 
 const registrar = async (req, res) =>{
-
-console.log(req.body);
     const { email, nombre } = req.body
 
     //prevenir usuarios duplicados
@@ -30,10 +28,9 @@ console.log(req.body);
     } catch (error) {
         console.log(error);
     }
-    
 }
 
-const perfil = (req, res) =>{
+const perfil = (req, res) => {
     const {veterinario}= req
     res.json(veterinario)
 }
@@ -58,6 +55,7 @@ const confirmar = async (req, res) =>{
 
 const autenticar = async(req, res) => {
     const { email, password } = req.body
+    //comprobar si el susuario existe
     const usuario = await Veterinario.findOne({email})
     if (!usuario) {
         const error = new Error("El usuario no existe")
@@ -108,10 +106,11 @@ const olvidePassword = async (req, res) =>{
     }
 }
 
-const comprobarToken = async (req, res) =>{
+const comprobarToken = async (req, res) => {
     const { token } = req.params
     const tokenValido = await Veterinario.findOne({token})
     if(tokenValido){
+        //El token es válido el ususario existe
         res.json({msg: "Token valido y el usuario existe"})
     }else{
         const error = new Error('Token no valido')
@@ -148,14 +147,12 @@ const actualizarPerfil = async (req, res) => {
     const { email } = req.body
     if (veterinario.email !== req.body.email) {
         const existeEmail = await Veterinario.findOne({email})
-            if (existeEmail) {
-                const error = new Error('Ese email ya esta en uso')
-                return res.status(400).json({
-                    msg: error.message
-                })
-            }
-        
+    if (existeEmail) {
+        const error = new Error('Ese email ya esta en uso')
+    return res.status(400).json({
+         msg: error.message})
     }
+}
 
     try {
         veterinario.nombre =req.body.nombre
@@ -163,7 +160,7 @@ const actualizarPerfil = async (req, res) => {
         veterinario.web =req.body.web
         veterinario.telefono =req.body.telefono
 
-        const veterinarioActualizado = await veterinario.save()
+    const veterinarioActualizado = await veterinario.save()
         res.json(veterinarioActualizado)
     } catch (error) {
         console.log(error);
@@ -194,8 +191,6 @@ const actualizarPassword = async (req, res) =>{
             msg: error.message
         })
     }
-
-    
 }
 
 export { registrar, perfil, confirmar, autenticar, olvidePassword, comprobarToken, nuevoPassword, actualizarPerfil, actualizarPassword}
