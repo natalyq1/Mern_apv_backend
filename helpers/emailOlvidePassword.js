@@ -1,4 +1,4 @@
-import iler from "nodemailer";
+import nodemailer from "nodemailer";
 
 const emailOlvidePassword = async (datos) => {
   const transporter = nodemailer.createTransport({
